@@ -1,0 +1,35 @@
+<html>
+	<head>
+		<title>Some title here</title>
+		<meta charset="UTF-8" />
+	</head>
+	<body>
+		<header>
+			<h1><template:var name="title" /></h1>
+		</header>
+		<main>
+			<template:code>
+				node:appendchild(xml.createtextnode("Some text here"))
+			</template:code>
+			<template:foreach name="sections">
+				<section>
+					<h2><template:var name="title" /></h2>
+					<template:if>
+						<template:code>
+							return values.text~=nil
+						</template:code>
+						<template:then>
+							<p><template:var name="text" /></p>
+						</template:then>
+						<template:else>
+							<p>Sorry, no content</p>
+						</template:else>
+					</template:if>
+				</section>
+			</template:foreach>
+		</main>
+		<footer>
+			Bye bye!
+		</footer>
+	</body>
+</html>
