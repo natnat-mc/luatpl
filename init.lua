@@ -56,6 +56,13 @@ function tpl.template:apply(values)
 	
 	local function imp(node, output, values)
 		if node.type:match '^template:' then
+			local within=node:getproperty 'within'
+			if within then
+				values=values[within]
+				if type(values)~='table' then
+					error "Values is not a table in within"
+				end
+			end
 			local subtype=node.type:sub(#("template:")+1)
 			if subtype=='group' or subtype=='then' or
 			 subtype=='else' then
@@ -145,6 +152,7 @@ function tpl.template:apply(values)
 	end
 	
 	imp(self.tree, rootnode, values)
+	rootnode.children[1].parent=nil
 	return rootnode.children[1]
 end
 
