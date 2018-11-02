@@ -171,7 +171,7 @@ end
 	 separate object.
 ]]
 function tpl.template:clone()
-	local clone=setmetatable(tpl.template, {})
+	local clone=setmetatable({}, tpl.template)
 	clone.tree=self.tree:clone(true)
 	return clone
 end
@@ -183,7 +183,7 @@ function tpl.parse(template)
 	if type(template)~='string' then
 		template=template:read '*a'
 	end
-	local templateobj=setmetatable(tpl.template, {})
+	local templateobj=setmetatable({}, tpl.template)
 	templateobj.tree=xml.parse(template, true)
 	return templateobj
 end
