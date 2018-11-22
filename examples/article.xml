@@ -1,0 +1,35 @@
+<article>
+	<section>
+		<h2><template:var name="title" /></h2>
+		<template:code>
+			if type(values.paragraphs[1])=='string' then
+				local len=#values.paragraphs
+				for i=1, len do
+					values.paragraphs[i]={
+						text=values.paragraphs[i],
+						id='p'..i
+					}
+				end
+			end
+		</template:code>
+		<template:foreach name="paragraphs">
+			<template:group>
+				<a></a>
+				<template:code>
+					local nodes=node:queryselectorall('a')
+					a=nodes[#nodes]
+					if values.id then
+						a:setproperty('name', values.id)
+					else
+						node:removechild(a)
+					end
+				</template:code>
+				<p><template:var name="text" /></p>
+			</template:group>
+		</template:foreach>
+	</section>
+	<footer>
+		<author><template:var name="author" /></author>
+		<date><template:var name="date" /></date>
+	</footer>
+</article>

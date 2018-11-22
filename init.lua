@@ -139,6 +139,27 @@ function tpl.template:apply(values)
 				if bl then
 					imp(bl, output, values)
 				end
+			elseif subtype=='template' then
+				-- execute a sub-template
+				local name=node:getproperty 'name'
+				local key=node:getproperty 'values'
+				if not name then
+					error "Template call without name"
+				end
+				local vals=key and values[key] or {}
+				if key and type(vals)~='table' then
+					error "Values are not a table"
+				end
+				local tpl=values[name]
+				if not tpl then
+					error "Template call without template"
+				end
+				
+				-- call the template
+				local root=tpl:apply(vals)
+				
+				-- add the returned root to the output
+				output:appendchild(root)
 			else
 				-- unknown type
 				error("Unknown subtype: "..subtype)

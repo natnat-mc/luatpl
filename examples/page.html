@@ -1,0 +1,32 @@
+<html>
+	
+	<!-- setup the values for template calls -->
+	<template:code>
+		values.header=values.templates.header
+		values.nav=values.templates.nav
+		values.footer=values.templates.footer
+		
+		for i=1, #values.articles do
+			values.articles[i]={
+				article=values.templates.article,
+				values=values.articles[i]
+			}
+		end
+	</template:code>
+	
+	<head>
+		<title><template:var name="title" /></title>
+		<meta charset="UTF-8" />
+	</head>
+	<body>
+		<template:template name="header" />
+		<template:template name="nav" />
+		<main>
+			<h1><template:var name="title" /></h1>
+			<template:foreach name="articles">
+				<template:template name="article" values="values" />
+			</template:foreach>
+		</main>
+		<template:template name="footer" />
+	</body>
+</html>
