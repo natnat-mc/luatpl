@@ -1,3 +1,16 @@
 <footer>
-	A footer, I guess
+	<ul>
+		<template:code>
+			for k, v in pairs(values) do
+				local t=type(v)
+				local li=xml.createnode 'li'
+				if t=='string' or t=='number' then
+					li:settext(k..' = '..v)
+				elseif t=='table' then
+					li:appendchild(v)
+				end
+				node:appendchild(li)
+			end
+		</template:code>
+	</ul>
 </footer>

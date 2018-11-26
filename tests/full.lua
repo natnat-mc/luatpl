@@ -1,4 +1,4 @@
-local tpl, xml=require 'tpl', require 'xml'
+local tpl, xml=require 'luatpl', require 'luaxml'
 
 -- create the values
 local values={}

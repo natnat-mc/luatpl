@@ -1,3 +1,7 @@
 <header>
-	A header, I guess
+	<h1><template:var name="title" /></h1>
+	<img alt="logo" />
+	<template:code>
+		node:queryselector 'img':setproperty('src', values.logo)
+	</template:code>
 </header>

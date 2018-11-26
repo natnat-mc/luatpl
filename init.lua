@@ -41,6 +41,7 @@ function tpl.template:apply(values)
 	
 	local rootnode=xml.createnode('root')
 	
+	-- execute template:code blocks
 	local function exec(node, output, values)
 		local code='return function(node, values, tpl, xml)\n'
 		code=code..node:gettext()
@@ -52,6 +53,62 @@ function tpl.template:apply(values)
 		end
 		local fn=block()
 		return fn(output, values, tpl, xml)
+	end
+	
+	-- load template:template values
+	local function getvals(nodes, ovalues)
+		local values={}
+		for i, node in ipairs(nodes) do
+			local t=node.type
+			if not t:match '^template:' then
+				error "Non-template block in template"
+			end
+			local ty=t:sub(#("template:")+1)
+			local name=node:getproperty 'name'
+			if not name then
+				error "Template value without name"
+			end
+			
+			if ty=='string' then
+				-- string values
+				local value=node:getproperty 'value'
+				if not value then
+					error "String key without value"
+				end
+				values[name]=value
+			elseif ty=='number' then
+				-- number values
+				local value=node:getproperty 'value'
+				if not value then
+					error "Number key without value"
+				end
+				value=tonumber(value)
+				if not value then
+					error "Invalid number"
+				end
+				values[name]=value
+			elseif ty=='code' then
+				-- code return value
+				values[name]=exec(node, nil, ovalues)
+			elseif ty=='key' then
+				-- key from current values
+				local orig=node:getproperty 'orig' or name
+				if ovalues[name]==nil then
+					error "Original value doesn't exist"
+				end
+				values[name]=ovalues[orig]
+			elseif ty=='node' then
+				-- XML node
+				local c=node.children
+				if not c or #c~=1 then
+					error "node key has one child"
+				end
+				values[name]=c[1]
+			else
+				error("Unknown type "..ty)
+			end
+		end
+		return values
 	end
 	
 	local function imp(node, output, values)
@@ -149,6 +206,10 @@ function tpl.template:apply(values)
 				local vals=key and values[key] or {}
 				if key and type(vals)~='table' then
 					error "Values are not a table"
+				end
+				local c=node.children
+				if not key and c and #c~=0 then
+					vals=getvals(c, values)
 				end
 				local tpl=values[name]
 				if not tpl then

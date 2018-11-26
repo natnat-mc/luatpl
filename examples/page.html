@@ -19,7 +19,10 @@
 		<meta charset="UTF-8" />
 	</head>
 	<body>
-		<template:template name="header" />
+		<template:template name="header">
+			<template:key name="title" />
+			<template:string name="logo" value="/favicon.ico" />
+		</template:template>
 		<template:template name="nav" />
 		<main>
 			<h1><template:var name="title" /></h1>
@@ -27,6 +30,15 @@
 				<template:template name="article" values="values" />
 			</template:foreach>
 		</main>
-		<template:template name="footer" />
+		<template:template name="footer">
+			<template:string name="foo" value="bar" />
+			<template:number name="baz" value="5" />
+			<template:node name="azaza">
+				<span class="em strong">Strong emphasis</span>
+			</template:node>
+			<template:code name="code">
+				return os.date()
+			</template:code>
+		</template:template>
 	</body>
 </html>
